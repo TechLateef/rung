@@ -124,6 +124,8 @@ pub fn continue_sync(repo: &impl rung_git::GitOps, state: &impl StateStore) -> R
                 });
             }
             Err(e) => {
+                let _ = repo.rebase_abort(); // Best effort
+                state.clear_sync_state()?;
                 return Err(e.into());
             }
         }
